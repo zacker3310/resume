@@ -1,42 +1,32 @@
-# resume
+# resume — retired
 
-Zac Acker's professional profile, transcribed from LinkedIn on 2026-08-30.
+This repository is decommissioned. Its content and its one piece of build
+tooling live in [`acker-cloud`](https://github.com/zacker3310/acker-cloud),
+and the site it produced is now a route on the main one:
 
-Next.js 16 (App Router, Turbopack) + Tailwind 4. Static, no data fetching.
-Styled with the acker.cloud design system: neutral grey base, signal red
-accent, dark only.
+**https://acker.cloud/resume**
 
-## Commands
+## Where everything went
 
-```sh
-pnpm dev              # http://localhost:3000
-pnpm build            # contrast gate, then next build
-pnpm typecheck
-pnpm check:contrast   # WCAG ratios for every pair the page uses
-```
+| What was here | Where it is now |
+|---|---|
+| `lib/profile.ts` — the LinkedIn transcription | `src/content/data/resume.json`, verbatim |
+| `app/page.tsx` — the profile page | `src/app/resume/page.tsx`, rebuilt in the acker.cloud design system |
+| `app/globals.css` print rules | the print block in `src/app/styles.css` |
+| the doubled focus ring | `src/app/globals.css`, now applied site-wide |
+| `scripts/contrast.mjs` — the WCAG gate | `scripts/contrast.mjs`, extended from one dark ramp to both themes and still blocking `build` |
 
-## Contrast gate
+Nothing was dropped. The role descriptions are still Zac's own wording, kept
+verbatim, and the résumé is now validated by zod on the same terms as the
+rest of the site's content.
 
-`scripts/contrast.mjs` measures every foreground/background pair against 4.5:1
-for text and 3:1 for a graphic, and it runs before `next build`. A ramp that
-drops below AA fails the build rather than shipping.
+The contrast gate earned its move: run against acker.cloud's existing ramp it
+found three real AA failures — a text token at 3.0:1, accent text at 3.81:1 on
+raised surfaces, and a focus ring at 2.85:1 — all fixed in the ramp rather
+than by deleting the pairs that produced them.
 
-Two values deviate from `references/tokens.md` in the acker-design skill,
-both because the measured numbers forced it:
+## History
 
-- `--accent` `#C0392B` is 3.20:1 on the base. It clears the graphic threshold
-  but not the text one, so it is used for rules, borders and focus rings only.
-  Red text uses `--accent-text` `#E8695C` at 5.48:1.
-- The reference's primary button (accent background, `--bg-base` text)
-  measures 3.39:1 and fails. Button text is `--text-primary` at 4.77:1.
-
-The focus ring is doubled (`--base` inner ring, then accent) so the accent
-always sits against the page background. A single ring measures 2.85:1 on a
-raised card.
-
-## Content
-
-`lib/profile.ts` holds everything. Role descriptions are Zac's own wording,
-kept verbatim. Update that file, not the page.
-
-There is no About section because the LinkedIn profile does not have one.
+The full history of this repo is intact; only the working tree was cleared.
+`git log` still has the original build, and `git show 4f84194` has the site as
+it shipped.
