@@ -39,3 +39,11 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# build loop: keep artifacts, drop run output
+.buildloop/tla/logs/
+.buildloop/tla/verdict.json
+.buildloop/**/states/
+
+# static export output, published to the gh-pages branch
+/out/

@@ -1,36 +1,42 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# resume
 
-## Getting Started
+Zac Acker's professional profile, transcribed from LinkedIn on 2026-08-30.
 
-First, run the development server:
+Next.js 16 (App Router, Turbopack) + Tailwind 4. Static, no data fetching.
+Styled with the acker.cloud design system: neutral grey base, signal red
+accent, dark only.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Commands
+
+```sh
+pnpm dev              # http://localhost:3000
+pnpm build            # contrast gate, then next build
+pnpm typecheck
+pnpm check:contrast   # WCAG ratios for every pair the page uses
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Contrast gate
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+`scripts/contrast.mjs` measures every foreground/background pair against 4.5:1
+for text and 3:1 for a graphic, and it runs before `next build`. A ramp that
+drops below AA fails the build rather than shipping.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Two values deviate from `references/tokens.md` in the acker-design skill,
+both because the measured numbers forced it:
 
-## Learn More
+- `--accent` `#C0392B` is 3.20:1 on the base. It clears the graphic threshold
+  but not the text one, so it is used for rules, borders and focus rings only.
+  Red text uses `--accent-text` `#E8695C` at 5.48:1.
+- The reference's primary button (accent background, `--bg-base` text)
+  measures 3.39:1 and fails. Button text is `--text-primary` at 4.77:1.
 
-To learn more about Next.js, take a look at the following resources:
+The focus ring is doubled (`--base` inner ring, then accent) so the accent
+always sits against the page background. A single ring measures 2.85:1 on a
+raised card.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Content
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+`lib/profile.ts` holds everything. Role descriptions are Zac's own wording,
+kept verbatim. Update that file, not the page.
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+There is no About section because the LinkedIn profile does not have one.
